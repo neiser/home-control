@@ -16,12 +16,18 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Home Control</name>
 
-    <properties>
-        <java.version>11</java.version>
-    </properties>
-
     <modules>
         <module>application</module>
+        <module>frontend</module>
     </modules>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>de.n04r.homecontrol</groupId>
+                <artifactId>frontend</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
