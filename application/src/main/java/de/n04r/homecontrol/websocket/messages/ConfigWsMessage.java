@@ -2,9 +2,9 @@ package de.n04r.homecontrol.websocket.messages;
 
 import lombok.Value;
 
-import java.util.List;
+import java.util.Set;
 
 @Value
 public class ConfigWsMessage implements AbstractWsMessage {
-    List<String> tags;
+    Set<String> tags;
 }

@@ -1,2 +1,17 @@
 logging.level:
   de.n04r.homecontrol: DEBUG
+
+devices:
+  - name: Büro
+    type: SHUTTER
+    host: shellyswitch25-68db76
+    tags: Oben
+  - name: Wohnzimmer Links
+    type: SHUTTER
+    host: shellyswitch25-68db76
+    tags: [ Unten, KüWoEss ]
+  - name: Wohnzimmer Mitte
+    type: SHUTTER
+    host: shellyswitch25-68db76
+    tags: [ Unten, KüWoEss ]
+
