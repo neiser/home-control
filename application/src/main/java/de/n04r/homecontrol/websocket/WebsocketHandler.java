@@ -2,7 +2,7 @@ package de.n04r.homecontrol.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.n04r.homecontrol.DevicesConfigurationProperties;
-import de.n04r.homecontrol.shelly.ShellyController;
+import de.n04r.homecontrol.shelly.ShellyDeviceHandler;
 import de.n04r.homecontrol.websocket.messages.AbstractWsMessage;
 import de.n04r.homecontrol.websocket.messages.ActionWsMessage;
 import de.n04r.homecontrol.websocket.messages.ConfigWsMessage;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class WebsocketHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper;
-    private final ShellyController shellyController;
+    private final ShellyDeviceHandler shellyDeviceHandler;
     private final DevicesConfigurationProperties devicesConfigurationProperties;
 
     @Override
@@ -48,9 +48,9 @@ public class WebsocketHandler extends TextWebSocketHandler {
                     .distinct()
                     .collect(Collectors.toList());
             if (message.getAction() == ActionWsMessage.Action.SHUTTER_DOWN) {
-                shellyController.closeShutters(deviceHosts);
+                shellyDeviceHandler.closeShutters(deviceHosts);
             } else if (message.getAction() == ActionWsMessage.Action.SHUTTER_UP) {
-                shellyController.openShutters(deviceHosts);
+                shellyDeviceHandler.openShutters(deviceHosts);
             } else {
                 log.debug("Not implemented: {}", message);
             }

@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ShellyController {
+public class ShellyDeviceHandler {
     private final RestTemplateBuilder restTemplateBuilder;
 
     public void openShutters(List<String> shellyHosts) {
