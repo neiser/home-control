@@ -68,9 +68,9 @@ devices:
     tags: Oben
   - name: TV Lampe
     type: SHELLY1PM
-    host: shelly1-BA338A
+    host: shelly1-BA338D
     tags: [ WoKüEss, Unten, TV ]
-  - name: TV Lampe
+  - name: TV
     type: SHELLY1PM
     host: shelly1-BA338A
     tags: [ WoKüEss, Unten, TV ]

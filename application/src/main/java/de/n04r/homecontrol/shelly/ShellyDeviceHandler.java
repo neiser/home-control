@@ -18,6 +18,14 @@ public class ShellyDeviceHandler {
         this.restTemplate = restTemplateBuilder.build();
     }
 
+    public void turnRelayOff(Device device) {
+        sendRelayCommand(device, "off");
+    }
+
+    public void turnRelayOn(Device device) {
+        sendRelayCommand(device, "on");
+    }
+
     public void openShutter(Device device) {
         sendShutterCommand(device, "open");
     }
@@ -28,6 +36,18 @@ public class ShellyDeviceHandler {
 
     public void stopShutter(Device device) {
         sendShutterCommand(device, "close");
+    }
+
+    private void sendRelayCommand(Device device, String command) {
+        String shellyHost = device.getHost();
+        log.debug("Sending relay command {} to host: {}", command, shellyHost);
+        URI uri = UriComponentsBuilder.fromPath("/relay/0")
+                .scheme("http")
+                .host(shellyHost)
+                .queryParam("turn", command)
+                .build().toUri();
+        String response = restTemplate.getForObject(uri, String.class);
+        log.debug("Got response: {}", response);
     }
 
     private void sendShutterCommand(Device device, String command) {

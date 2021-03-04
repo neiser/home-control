@@ -25,14 +25,28 @@ public class ActionHandler {
         List<Device> devicesSupportingAction = devices.stream()
                 .filter(device -> device.getType().getSupportedActions().contains(action))
                 .collect(Collectors.toList());
-        if (action == Action.SHUTTER_DOWN) {
-            devicesSupportingAction.forEach(shellyDeviceHandler::closeShutter);
-        } else if (action == Action.SHUTTER_UP) {
-            devicesSupportingAction.forEach(shellyDeviceHandler::openShutter);
-        } else if (action == Action.SHUTTER_STOP) {
-            devicesSupportingAction.forEach(shellyDeviceHandler::stopShutter);
-        } else {
-            log.debug("Not implemented: {}", action);
+
+        log.debug("Executing {} on {} devices", action, devicesSupportingAction.size());
+
+        switch (action) {
+            case SWITCH_ON:
+                devicesSupportingAction.forEach(shellyDeviceHandler::turnRelayOn);
+                break;
+            case SWITCH_OFF:
+                devicesSupportingAction.forEach(shellyDeviceHandler::turnRelayOff);
+                break;
+            case SHUTTER_UP:
+                devicesSupportingAction.forEach(shellyDeviceHandler::openShutter);
+                break;
+            case SHUTTER_DOWN:
+                devicesSupportingAction.forEach(shellyDeviceHandler::closeShutter);
+                break;
+            case SHUTTER_STOP:
+                devicesSupportingAction.forEach(shellyDeviceHandler::stopShutter);
+                break;
+            default:
+                log.debug("Action not implemented: {}", action);
+                break;
         }
     }
 }
