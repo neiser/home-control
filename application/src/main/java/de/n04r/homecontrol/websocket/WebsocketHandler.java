@@ -45,6 +45,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
             List<String> deviceHosts = devicesConfigurationProperties.stream()
                     .filter(device -> device.getTags().stream().anyMatch(deviceTag -> message.getTags().contains(deviceTag)))
                     .map(DevicesConfigurationProperties.Device::getHost)
+                    .distinct()
                     .collect(Collectors.toList());
             if (message.getAction() == ActionWsMessage.Action.SHUTTER_DOWN) {
                 shellyController.closeShutters(deviceHosts);

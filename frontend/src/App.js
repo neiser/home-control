@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import useWebSocket, {ReadyState} from 'react-use-websocket';
+import './App.css'
 
 function App() {
     const {
@@ -12,7 +13,7 @@ function App() {
     });
 
     const [availableTags, setAvailableTags] = useState([]);
-    const [selectedTags, setSelectedTags] = useState(new Set());
+    const [selectedTags, setSelectedTags] = useState([]);
 
     useEffect(
         () => {
@@ -35,12 +36,13 @@ function App() {
     );
 
     const toggleTag = (tag) => {
-        if (selectedTags.has(tag)) {
-            selectedTags.delete(tag)
+        let index = selectedTags.indexOf(tag);
+        if (index > -1) {
+            selectedTags.splice(index, 1)
         } else {
-            selectedTags.add(tag)
+            selectedTags.push(tag)
         }
-        setSelectedTags(selectedTags)
+        setSelectedTags([...selectedTags])
     }
 
     const triggerAction = (action) => {
@@ -58,7 +60,8 @@ function App() {
     return (<>
         <div>Home Control: {connectionStatus}</div>
         <div>
-            {availableTags.map(tag => <button key={tag} onClick={() => toggleTag(tag)}>{tag}</button>)}
+            {availableTags.map(tag => <button key={tag} onClick={() => toggleTag(tag)}
+                                              className={selectedTags.indexOf(tag) > -1 ? "toggle-button-active" : " "}>{tag}</button>)}
         </div>
         <div>
             <button onClick={() => triggerAction("SHUTTER_DOWN")}>
