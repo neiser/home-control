@@ -2,6 +2,9 @@ package de.n04r.homecontrol.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.n04r.homecontrol.DevicesConfigurationProperties;
+import de.n04r.homecontrol.model.ActionHandler;
+import de.n04r.homecontrol.model.Device;
+import de.n04r.homecontrol.model.TagHandler;
 import de.n04r.homecontrol.shelly.ShellyDeviceHandler;
 import de.n04r.homecontrol.websocket.messages.AbstractWsMessage;
 import de.n04r.homecontrol.websocket.messages.ActionWsMessage;
@@ -14,8 +17,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -25,15 +26,17 @@ public class WebsocketHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper;
     private final ShellyDeviceHandler shellyDeviceHandler;
+    private final TagHandler tagHandler;
+    private final ActionHandler actionHandler;
     private final DevicesConfigurationProperties devicesConfigurationProperties;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        log.debug("Connection established");
-        Set<String> availableTags = devicesConfigurationProperties.stream()
-                .flatMap(device -> device.getTags().stream())
-                .collect(Collectors.toSet());
-        String payload = objectMapper.writeValueAsString(new ConfigWsMessage(availableTags));
+        log.debug("Connection established, sending available tags and actions");
+        String payload = objectMapper.writeValueAsString(new ConfigWsMessage(
+                tagHandler.getAvailableTags(),
+                actionHandler.getAvailableActions()
+        ));
         session.sendMessage(new TextMessage(payload));
     }
 
@@ -42,18 +45,8 @@ public class WebsocketHandler extends TextWebSocketHandler {
         AbstractWsMessage abstractMessage = objectMapper.readValue(textMessage.getPayload(), AbstractWsMessage.class);
         if (abstractMessage instanceof ActionWsMessage) {
             ActionWsMessage message = (ActionWsMessage) abstractMessage;
-            List<String> deviceHosts = devicesConfigurationProperties.stream()
-                    .filter(device -> device.getTags().stream().anyMatch(deviceTag -> message.getTags().contains(deviceTag)))
-                    .map(DevicesConfigurationProperties.Device::getHost)
-                    .distinct()
-                    .collect(Collectors.toList());
-            if (message.getAction() == ActionWsMessage.Action.SHUTTER_DOWN) {
-                shellyDeviceHandler.closeShutters(deviceHosts);
-            } else if (message.getAction() == ActionWsMessage.Action.SHUTTER_UP) {
-                shellyDeviceHandler.openShutters(deviceHosts);
-            } else {
-                log.debug("Not implemented: {}", message);
-            }
+            List<Device> devices = tagHandler.findDevices(message.getTags());
+            actionHandler.executeAction(devices, message.getAction());
         }
     }
 }

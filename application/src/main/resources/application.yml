@@ -3,66 +3,75 @@ logging.level:
 
 devices:
   - name: Küche links
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-687B91
     tags: [ Unten, WoKüEss ]
   - name: Küche rechts
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-6886EF
     tags: [ Unten, WoKüEss ]
   - name: Wohnzimmer links
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-688911
-    tags: [ Unten, WoKüEss ]
+    tags: [ Unten, WoKüEss, Hinten ]
   - name: Wohnzimmer mitte
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-687B95
-    tags: [ Unten, WoKüEss ]
+    tags: [ Unten, WoKüEss, Hinten ]
   - name: Wohnzimmer rechts
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-68872F
-    tags: [ Unten, WoKüEss ]
+    tags: [ Unten, WoKüEss, Hinten ]
   - name: Esszimmer links
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-687D3C
     tags: [ Unten, WoKüEss ]
   - name: Esszimmer links
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-68DC50
     tags: [ Unten, WoKüEss ]
   - name: HWR Tür
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-68DB9F
-    tags: Unten
+    tags: [ Unten, Hinten ]
   - name: HWR Fenster
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-68DC82
-    tags: Unten
+    tags: [ Unten, Hinten ]
   - name: Gäste
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-688DAD
     tags: Unten
   - name: Eltern rechts
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-6923BE
     tags: [ Oben, NichtBad ]
   - name: Eltern links
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-6926D5
     tags: [ Oben, NichtBad ]
   - name: Kind links
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-68DBA5
     tags: [ Oben, NichtBad ]
   - name: Kind rechts
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-68DAD0
     tags: [ Oben, NichtBad ]
   - name: Büro
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-68DB76
     tags: [ Oben, NichtBad ]
   - name: Bad
-    type: SHUTTER
+    type: SHELLY25_SHUTTER
     host: shellyswitch25-68DB2E
     tags: Oben
+  - name: TV Lampe
+    type: SHELLY1PM
+    host: shelly1-BA338A
+    tags: [ WoKüEss, Unten, TV ]
+  - name: TV Lampe
+    type: SHELLY1PM
+    host: shelly1-BA338A
+    tags: [ WoKüEss, Unten, TV ]
+

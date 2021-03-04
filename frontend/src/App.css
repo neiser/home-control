@@ -1,3 +1,7 @@
 .toggle-button-active {
     background: #8dc9ee;
 }
+
+button {
+    font-size: 20pt;
+}

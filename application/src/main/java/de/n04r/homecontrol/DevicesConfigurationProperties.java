@@ -1,5 +1,7 @@
 package de.n04r.homecontrol;
 
+import de.n04r.homecontrol.model.Device;
+import de.n04r.homecontrol.model.DeviceType;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,13 +13,13 @@ import java.util.Set;
 
 @Component
 @ConfigurationProperties(prefix = "devices")
-public class DevicesConfigurationProperties extends ArrayList<DevicesConfigurationProperties.Device> {
+public class DevicesConfigurationProperties extends ArrayList<DevicesConfigurationProperties.DeviceConfigItem> {
 
     @Value
     @RequiredArgsConstructor(onConstructor_ = @ConstructorBinding)
-    public static class Device {
+    public static class DeviceConfigItem implements Device {
         String name;
-        String type;
+        DeviceType type;
         String host;
         Set<String> tags;
     }

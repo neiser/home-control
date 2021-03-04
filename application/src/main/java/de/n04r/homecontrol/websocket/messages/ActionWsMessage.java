@@ -1,6 +1,7 @@
 package de.n04r.homecontrol.websocket.messages;
 
 
+import de.n04r.homecontrol.model.Action;
 import lombok.Value;
 
 import java.util.Map;
@@ -12,11 +13,4 @@ public class ActionWsMessage implements AbstractWsMessage {
     Set<String> tags;
     Map<String, Object> properties;
 
-    public enum Action {
-        ON,
-        OFF,
-        SHUTTER_DOWN,
-        SHUTTER_UP,
-        SHUTTER_SET
-    }
 }

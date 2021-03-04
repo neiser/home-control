@@ -13,6 +13,7 @@ function App() {
     });
 
     const [availableTags, setAvailableTags] = useState([]);
+    const [availableActions, setAvailableActions] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
 
     useEffect(
@@ -23,6 +24,7 @@ function App() {
             switch (lastJsonMessage.type) {
                 case "config":
                     setAvailableTags(lastJsonMessage.tags)
+                    setAvailableActions(lastJsonMessage.actions)
                     break;
                 case "tooltip":
                     // TODO Implement me
@@ -58,20 +60,18 @@ function App() {
     }[readyState];
 
     return (<>
-        <div>Home Control: {connectionStatus}</div>
+        <h3>Batch</h3>
         <div>
-            {availableTags.map(tag => <button key={tag} onClick={() => toggleTag(tag)}
+            {availableTags.map(tag => <button key={"tag-" + tag} onClick={() => toggleTag(tag)}
                                               className={selectedTags.indexOf(tag) > -1 ? "toggle-button-active" : " "}>{tag}</button>)}
         </div>
-        <div>
-            <button onClick={() => triggerAction("SHUTTER_DOWN")}>
-                Shutter down
-            </button>
-            <button onClick={() => triggerAction("SHUTTER_UP")}>
-                Shutter up
-            </button>
+        <div style={{"marginTop": "1em"}}>
+            {availableActions.map(action => <button key={"action-" + action}
+                                                    onClick={() => triggerAction(action)}>{action}</button>)}
         </div>
+        <h3>Status</h3>
+        <div>Connection: {connectionStatus}</div>
     </>);
-}
+};
 
 export default App;
