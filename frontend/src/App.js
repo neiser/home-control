@@ -7,7 +7,7 @@ function App() {
         sendJsonMessage,
         lastJsonMessage,
         readyState
-    } = useWebSocket("ws://localhost:8080/api", {
+    } = useWebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/api", {
         shouldReconnect: () => true,
         reconnectAttempts: Number.MAX_SAFE_INTEGER
     });
