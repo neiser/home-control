@@ -1,6 +1,6 @@
 package de.n04r.homecontrol.model;
 
-import de.n04r.homecontrol.DevicesConfigurationProperties;
+import de.n04r.homecontrol.config.DevicesConfigurationProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

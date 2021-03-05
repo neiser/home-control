@@ -1,6 +1,22 @@
 logging.level:
   de.n04r.homecontrol: DEBUG
 
+scenes:
+  - name: TV
+    commands:
+      - action: SWITCH_ON
+        devices: [ TV ]
+  - name: TV Abend
+    commands:
+      - action: SWITCH_ON
+        devices: [ TV, TV Lampe ]
+      - action: SHUTTER_DOWN
+        tags: WoKüEss
+  - name: Guten Morgen
+    commands:
+      - action: SHUTTER_UP
+        tags: [ Unten, NichtBad ]
+
 devices:
   - name: Küche links
     type: SHELLY25_SHUTTER
@@ -69,7 +85,7 @@ devices:
   - name: TV Lampe
     type: SHELLY1PM
     host: shelly1-BA338D
-    tags: [ WoKüEss, Unten, TV ]
+    tags: [ WoKüEss, Unten ]
   - name: TV
     type: SHELLY1PM
     host: shelly1-BA338A

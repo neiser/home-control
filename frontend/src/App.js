@@ -9,11 +9,13 @@ function App() {
         readyState
     } = useWebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/api", {
         shouldReconnect: () => true,
+        reconnectInterval: 500, // ms
         reconnectAttempts: Number.MAX_SAFE_INTEGER
     });
 
     const [availableTags, setAvailableTags] = useState([]);
     const [availableActions, setAvailableActions] = useState([]);
+    const [availableScenes, setAvailableScenes] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [lastActionResult, setLastActionResult] = useState(null);
 
@@ -26,6 +28,9 @@ function App() {
             switch (lastJsonMessage.type) {
                 case "available-tags":
                     setAvailableTags(lastJsonMessage.tags)
+                    break;
+                case "available-scenes":
+                    setAvailableScenes(lastJsonMessage.scenes)
                     break;
                 case "available-actions":
                     setAvailableActions(lastJsonMessage.actions)
@@ -52,7 +57,11 @@ function App() {
     }
 
     const triggerAction = (action) => {
-        sendJsonMessage({type: "action", action: action, tags: [...selectedTags]})
+        sendJsonMessage({type: "execute-action", action: action, tags: [...selectedTags]})
+    }
+
+    const activateScene = (scene) => {
+        sendJsonMessage({type: "activate-scene", scene: scene})
     }
 
     const connectionStatus = {
@@ -73,6 +82,9 @@ function App() {
             {availableActions.map(action => <button type="button" key={"action-" + action.id}
                                                     onClick={() => triggerAction(action.id)}>{action.displayName}</button>)}
         </div>
+        <h3>Scenes</h3>
+        {availableScenes.map(scene => <button type="button" key={"scene-" + scene}
+                                              onClick={() => activateScene(scene)}>{scene}</button>)}
         <h3>Status</h3>
         <div>Connection: {connectionStatus}</div>
         {lastActionResult &&

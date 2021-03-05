@@ -5,12 +5,15 @@ import de.n04r.homecontrol.model.Action;
 import de.n04r.homecontrol.model.ActionHandler;
 import de.n04r.homecontrol.model.ActionResult;
 import de.n04r.homecontrol.model.Device;
+import de.n04r.homecontrol.model.SceneHandler;
 import de.n04r.homecontrol.model.TagHandler;
 import de.n04r.homecontrol.websocket.messages.AbstractWsMessage;
 import de.n04r.homecontrol.websocket.messages.ActionResultWsMessage;
-import de.n04r.homecontrol.websocket.messages.ActionWsMessage;
+import de.n04r.homecontrol.websocket.messages.ActivateSceneWsMessage;
 import de.n04r.homecontrol.websocket.messages.AvailableActionsWsMessage;
+import de.n04r.homecontrol.websocket.messages.AvailableScenesWsMessage;
 import de.n04r.homecontrol.websocket.messages.AvailableTagsWsMessage;
+import de.n04r.homecontrol.websocket.messages.ExecuteActionWsMessage;
 import de.n04r.homecontrol.websocket.messages.TagsSelectedWsMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +33,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class WebsocketHandler extends TextWebSocketHandler {
 
-    private final ObjectMapper objectMapper;
     private final TagHandler tagHandler;
     private final ActionHandler actionHandler;
+    private final SceneHandler sceneHandler;
+    private final ObjectMapper objectMapper;
+
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        log.debug("Connection established, sending available tags");
+        log.debug("Connection established");
         sendMessage(session, new AvailableTagsWsMessage(tagHandler.getAvailableTags()));
+        sendMessage(session, new AvailableScenesWsMessage(sceneHandler.getAvailableScenes()));
     }
 
     @Override
@@ -48,11 +54,11 @@ public class WebsocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
         AbstractWsMessage abstractMessage = objectMapper.readValue(textMessage.getPayload(), AbstractWsMessage.class);
-        if (abstractMessage instanceof ActionWsMessage) {
-            ActionWsMessage message = (ActionWsMessage) abstractMessage;
+        if (abstractMessage instanceof ExecuteActionWsMessage) {
+            ExecuteActionWsMessage message = (ExecuteActionWsMessage) abstractMessage;
             List<Device> devices = tagHandler.findDevices(message.getTags());
             ActionResult actionResult = actionHandler.executeAction(devices, message.getAction());
-            sendMessage(session, new ActionResultWsMessage(actionResult.getSuccessful(), actionResult.getFailed()));
+            sendActionResult(session, actionResult);
 
         } else if (abstractMessage instanceof TagsSelectedWsMessage) {
             TagsSelectedWsMessage message = (TagsSelectedWsMessage) abstractMessage;
@@ -61,10 +67,19 @@ public class WebsocketHandler extends TextWebSocketHandler {
             sendMessage(session, new AvailableActionsWsMessage(availableActions.stream()
                     .map(action -> new AvailableActionsWsMessage.ActionWithDisplayName(action.name(), action.getDisplayName()))
                     .collect(Collectors.toList())));
+        } else if (abstractMessage instanceof ActivateSceneWsMessage) {
+            ActivateSceneWsMessage message = (ActivateSceneWsMessage) abstractMessage;
+            ActionResult actionResult = sceneHandler.activateScene(message.getScene());
+            sendActionResult(session, actionResult);
         }
     }
 
+    private void sendActionResult(WebSocketSession session, ActionResult actionResult) throws IOException {
+        sendMessage(session, new ActionResultWsMessage(actionResult.getSuccessful(), actionResult.getFailed()));
+    }
+
     private void sendMessage(WebSocketSession session, AbstractWsMessage message) throws IOException {
+        log.debug("Sending message {}", message);
         String payload = objectMapper.writeValueAsString(message);
         session.sendMessage(new TextMessage(payload));
     }

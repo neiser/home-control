@@ -6,4 +6,8 @@ import lombok.Value;
 public class ActionResult {
     long successful;
     long failed;
+
+    public ActionResult plus(ActionResult other) {
+        return new ActionResult(other.getSuccessful() + successful, other.getFailed() + failed);
+    }
 }

@@ -1,4 +1,4 @@
-package de.n04r.homecontrol;
+package de.n04r.homecontrol.config;
 
 import de.n04r.homecontrol.model.Device;
 import de.n04r.homecontrol.model.DeviceType;
