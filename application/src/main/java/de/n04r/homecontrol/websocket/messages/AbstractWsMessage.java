@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @Type(value = AvailableTagsWsMessage.class, name = "available-tags"),
         @Type(value = AvailableActionsWsMessage.class, name = "available-actions"),
         @Type(value = TagsSelectedWsMessage.class, name = "tags-selected"),
-        @Type(value = ActionWsMessage.class, name = "action")
+        @Type(value = ActionWsMessage.class, name = "action"),
+        @Type(value = ActionResultWsMessage.class, name = "action-result"),
 })
 public interface AbstractWsMessage {
 

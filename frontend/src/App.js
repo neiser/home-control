@@ -15,6 +15,8 @@ function App() {
     const [availableTags, setAvailableTags] = useState([]);
     const [availableActions, setAvailableActions] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [lastActionResult, setLastActionResult] = useState(null);
+
 
     useEffect(
         () => {
@@ -28,9 +30,8 @@ function App() {
                 case "available-actions":
                     setAvailableActions(lastJsonMessage.actions)
                     break;
-                case "action-executed":
-                    // TODO Implement me
-                    console.log(lastJsonMessage);
+                case "action-result":
+                    setLastActionResult(lastJsonMessage);
                     break;
                 default:
                     console.log(`Unknown message type: ${lastJsonMessage.type}`)
@@ -74,6 +75,8 @@ function App() {
         </div>
         <h3>Status</h3>
         <div>Connection: {connectionStatus}</div>
+        {lastActionResult &&
+        <div>Last action: Successful={lastActionResult.successful} Failed={lastActionResult.failed}</div>}
     </>);
 }
 

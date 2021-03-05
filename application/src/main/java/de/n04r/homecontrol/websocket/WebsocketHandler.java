@@ -1,10 +1,13 @@
 package de.n04r.homecontrol.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.n04r.homecontrol.model.Action;
 import de.n04r.homecontrol.model.ActionHandler;
+import de.n04r.homecontrol.model.ActionResult;
 import de.n04r.homecontrol.model.Device;
 import de.n04r.homecontrol.model.TagHandler;
 import de.n04r.homecontrol.websocket.messages.AbstractWsMessage;
+import de.n04r.homecontrol.websocket.messages.ActionResultWsMessage;
 import de.n04r.homecontrol.websocket.messages.ActionWsMessage;
 import de.n04r.homecontrol.websocket.messages.AvailableActionsWsMessage;
 import de.n04r.homecontrol.websocket.messages.AvailableTagsWsMessage;
@@ -48,13 +51,16 @@ public class WebsocketHandler extends TextWebSocketHandler {
         if (abstractMessage instanceof ActionWsMessage) {
             ActionWsMessage message = (ActionWsMessage) abstractMessage;
             List<Device> devices = tagHandler.findDevices(message.getTags());
-            actionHandler.executeAction(devices, message.getAction());
+            ActionResult actionResult = actionHandler.executeAction(devices, message.getAction());
+            sendMessage(session, new ActionResultWsMessage(actionResult.getSuccessful(), actionResult.getFailed()));
+
         } else if (abstractMessage instanceof TagsSelectedWsMessage) {
             TagsSelectedWsMessage message = (TagsSelectedWsMessage) abstractMessage;
-            List<AvailableActionsWsMessage.ActionWithDisplayName> availableActions = tagHandler.findAvailableActions(message.getTags()).stream()
+            List<Action> availableActions = tagHandler.findAvailableActions(message.getTags());
+            log.debug("Sending available actions {} for tags {}", availableActions, message.getTags());
+            sendMessage(session, new AvailableActionsWsMessage(availableActions.stream()
                     .map(action -> new AvailableActionsWsMessage.ActionWithDisplayName(action.name(), action.getDisplayName()))
-                    .collect(Collectors.toList());
-            sendMessage(session, new AvailableActionsWsMessage(availableActions));
+                    .collect(Collectors.toList())));
         }
     }
 
