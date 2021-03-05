@@ -62,11 +62,11 @@ function App() {
     return (<>
         <h3>Batch</h3>
         <div>
-            {availableTags.map(tag => <button key={"tag-" + tag} onClick={() => toggleTag(tag)}
-                                              className={selectedTags.indexOf(tag) > -1 ? "toggle-button-active" : " "}>{tag}</button>)}
+            {availableTags.map(tag => <button type="button" key={"tag-" + tag} onClick={() => toggleTag(tag)}
+                                              className={selectedTags.indexOf(tag) > -1 ? "toggle-button-active" : null}>{tag}</button>)}
         </div>
         <div style={{"marginTop": "1em"}}>
-            {availableActions.map(action => <button key={"action-" + action}
+            {availableActions.map(action => <button type="button" key={"action-" + action}
                                                     onClick={() => triggerAction(action)}>{action}</button>)}
         </div>
         <h3>Status</h3>
