@@ -24,7 +24,7 @@ devices:
     tags: [ ]
   - name: TV Lampe
     type: SHELLY1PM
-    host: shelly1-BA338ABA338D
+    host: shelly1-BA338A
     tags: [ ]
   - name: Küche links
     type: SHELLY25_SHUTTER
