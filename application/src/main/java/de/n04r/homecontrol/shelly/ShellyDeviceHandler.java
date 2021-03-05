@@ -35,7 +35,7 @@ public class ShellyDeviceHandler {
     }
 
     public void stopShutter(Device device) {
-        sendShutterCommand(device, "close");
+        sendShutterCommand(device, "stop");
     }
 
     private void sendRelayCommand(Device device, String command) {
