@@ -18,6 +18,14 @@ scenes:
         tags: [ Unten, NichtBad ]
 
 devices:
+  - name: TV
+    type: SHELLY1PM
+    host: shelly1-BA338D
+    tags: [ ]
+  - name: TV Lampe
+    type: SHELLY1PM
+    host: shelly1-BA338ABA338D
+    tags: [ ]
   - name: Küche links
     type: SHELLY25_SHUTTER
     host: shellyswitch25-687B91
@@ -25,6 +33,14 @@ devices:
   - name: Küche rechts
     type: SHELLY25_SHUTTER
     host: shellyswitch25-6886EF
+    tags: [ Unten, WoKüEss ]
+  - name: EssZi links
+    type: SHELLY25_SHUTTER
+    host: shellyswitch25-687D3C
+    tags: [ Unten, WoKüEss ]
+  - name: EssZi rechts
+    type: SHELLY25_SHUTTER
+    host: shellyswitch25-68DC50
     tags: [ Unten, WoKüEss ]
   - name: WoZi links
     type: SHELLY25_SHUTTER
@@ -38,14 +54,6 @@ devices:
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68872F
     tags: [ Unten, WoKüEss, Hinten ]
-  - name: EssZi links
-    type: SHELLY25_SHUTTER
-    host: shellyswitch25-687D3C
-    tags: [ Unten, WoKüEss ]
-  - name: EssZi links
-    type: SHELLY25_SHUTTER
-    host: shellyswitch25-68DC50
-    tags: [ Unten, WoKüEss ]
   - name: HWR Tür
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68DB9F
@@ -58,6 +66,14 @@ devices:
     type: SHELLY25_SHUTTER
     host: shellyswitch25-688DAD
     tags: Unten
+  - name: Gäste WC
+    type: SHELLY25_SHUTTER
+    host: shellyswitch25-68db92
+    tags: Unten
+  - name: Bad
+    type: SHELLY25_SHUTTER
+    host: shellyswitch25-68DB2E
+    tags: Oben
   - name: Eltern rechts
     type: SHELLY25_SHUTTER
     host: shellyswitch25-6923BE
@@ -78,16 +94,5 @@ devices:
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68DB76
     tags: [ Oben, NichtBad ]
-  - name: Bad
-    type: SHELLY25_SHUTTER
-    host: shellyswitch25-68DB2E
-    tags: Oben
-  - name: TV Lampe
-    type: SHELLY1PM
-    host: shelly1-BA338D
-    tags: [ WoKüEss, Unten ]
-  - name: TV
-    type: SHELLY1PM
-    host: shelly1-BA338A
-    tags: [ WoKüEss, Unten ]
+
 
