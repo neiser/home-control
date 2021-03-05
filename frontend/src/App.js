@@ -72,6 +72,6 @@ function App() {
         <h3>Status</h3>
         <div>Connection: {connectionStatus}</div>
     </>);
-};
+}
 
 export default App;
