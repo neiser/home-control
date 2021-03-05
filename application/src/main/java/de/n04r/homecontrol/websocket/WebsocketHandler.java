@@ -6,7 +6,9 @@ import de.n04r.homecontrol.model.Device;
 import de.n04r.homecontrol.model.TagHandler;
 import de.n04r.homecontrol.websocket.messages.AbstractWsMessage;
 import de.n04r.homecontrol.websocket.messages.ActionWsMessage;
-import de.n04r.homecontrol.websocket.messages.ConfigWsMessage;
+import de.n04r.homecontrol.websocket.messages.AvailableActionsWsMessage;
+import de.n04r.homecontrol.websocket.messages.AvailableTagsWsMessage;
+import de.n04r.homecontrol.websocket.messages.TagsSelectedWsMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +17,9 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -29,12 +33,8 @@ public class WebsocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        log.debug("Connection established, sending available tags and actions");
-        String payload = objectMapper.writeValueAsString(new ConfigWsMessage(
-                tagHandler.getAvailableTags(),
-                actionHandler.getAvailableActions()
-        ));
-        session.sendMessage(new TextMessage(payload));
+        log.debug("Connection established, sending available tags");
+        sendMessage(session, new AvailableTagsWsMessage(tagHandler.getAvailableTags()));
     }
 
     @Override
@@ -49,6 +49,17 @@ public class WebsocketHandler extends TextWebSocketHandler {
             ActionWsMessage message = (ActionWsMessage) abstractMessage;
             List<Device> devices = tagHandler.findDevices(message.getTags());
             actionHandler.executeAction(devices, message.getAction());
+        } else if (abstractMessage instanceof TagsSelectedWsMessage) {
+            TagsSelectedWsMessage message = (TagsSelectedWsMessage) abstractMessage;
+            List<AvailableActionsWsMessage.ActionWithDisplayName> availableActions = tagHandler.findAvailableActions(message.getTags()).stream()
+                    .map(action -> new AvailableActionsWsMessage.ActionWithDisplayName(action.name(), action.getDisplayName()))
+                    .collect(Collectors.toList());
+            sendMessage(session, new AvailableActionsWsMessage(availableActions));
         }
+    }
+
+    private void sendMessage(WebSocketSession session, AbstractWsMessage message) throws IOException {
+        String payload = objectMapper.writeValueAsString(message);
+        session.sendMessage(new TextMessage(payload));
     }
 }

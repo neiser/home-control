@@ -5,7 +5,6 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-public class ConfigWsMessage implements AbstractWsMessage {
+public class AvailableTagsWsMessage implements AbstractWsMessage {
     List<String> tags;
-    List<String> actions;
 }

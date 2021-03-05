@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
-        @Type(value = ConfigWsMessage.class, name = "config"),
+        @Type(value = AvailableTagsWsMessage.class, name = "available-tags"),
+        @Type(value = AvailableActionsWsMessage.class, name = "available-actions"),
+        @Type(value = TagsSelectedWsMessage.class, name = "tags-selected"),
         @Type(value = ActionWsMessage.class, name = "action")
 })
 public interface AbstractWsMessage {

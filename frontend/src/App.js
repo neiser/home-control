@@ -22,11 +22,13 @@ function App() {
                 return;
             }
             switch (lastJsonMessage.type) {
-                case "config":
+                case "available-tags":
                     setAvailableTags(lastJsonMessage.tags)
+                    break;
+                case "available-actions":
                     setAvailableActions(lastJsonMessage.actions)
                     break;
-                case "tooltip":
+                case "action-executed":
                     // TODO Implement me
                     console.log(lastJsonMessage);
                     break;
@@ -45,6 +47,7 @@ function App() {
             selectedTags.push(tag)
         }
         setSelectedTags([...selectedTags])
+        sendJsonMessage({type: "tags-selected", tags: [...selectedTags]})
     }
 
     const triggerAction = (action) => {
@@ -66,8 +69,8 @@ function App() {
                                               className={selectedTags.indexOf(tag) > -1 ? "toggle-button-active" : null}>{tag}</button>)}
         </div>
         <div style={{"marginTop": "1em"}}>
-            {availableActions.map(action => <button type="button" key={"action-" + action}
-                                                    onClick={() => triggerAction(action)}>{action}</button>)}
+            {availableActions.map(action => <button type="button" key={"action-" + action.id}
+                                                    onClick={() => triggerAction(action.id)}>{action.displayName}</button>)}
         </div>
         <h3>Status</h3>
         <div>Connection: {connectionStatus}</div>

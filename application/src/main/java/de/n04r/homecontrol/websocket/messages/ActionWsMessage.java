@@ -12,5 +12,4 @@ public class ActionWsMessage implements AbstractWsMessage {
     Action action;
     Set<String> tags;
     Map<String, Object> properties;
-
 }
