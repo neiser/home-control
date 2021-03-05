@@ -16,6 +16,7 @@ function App() {
     const [availableTags, setAvailableTags] = useState([]);
     const [availableActions, setAvailableActions] = useState([]);
     const [availableScenes, setAvailableScenes] = useState([]);
+    const [availableDevices, setAvailableDevices] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [lastActionResult, setLastActionResult] = useState(null);
 
@@ -34,6 +35,9 @@ function App() {
                     break;
                 case "available-actions":
                     setAvailableActions(lastJsonMessage.actions)
+                    break;
+                case "available-devices":
+                    setAvailableDevices(lastJsonMessage.devices)
                     break;
                 case "action-result":
                     setLastActionResult(lastJsonMessage);
@@ -56,8 +60,12 @@ function App() {
         sendJsonMessage({type: "tags-selected", tags: [...selectedTags]})
     }
 
-    const triggerAction = (action) => {
-        sendJsonMessage({type: "execute-action", action: action, tags: [...selectedTags]})
+    const executeBatchAction = (action) => {
+        sendJsonMessage({type: "execute-batch-action", action: action, tags: [...selectedTags]})
+    }
+
+    const executeDeviceAction = (device, action) => {
+        sendJsonMessage({type: "execute-device-action", action: action, device: device})
     }
 
     const activateScene = (scene) => {
@@ -80,11 +88,20 @@ function App() {
         </div>
         <div style={{"marginTop": "1em"}}>
             {availableActions.map(action => <button type="button" key={"action-" + action.id}
-                                                    onClick={() => triggerAction(action.id)}>{action.displayName}</button>)}
+                                                    onClick={() => executeBatchAction(action.id)}>{action.displayName}</button>)}
         </div>
         <h3>Scenes</h3>
         {availableScenes.map(scene => <button type="button" key={"scene-" + scene}
                                               onClick={() => activateScene(scene)}>{scene}</button>)}
+        <h3>Devices</h3>
+        {
+            availableDevices.map((device, index) => <>
+                <h3>{device.name}</h3>
+                {device.availableActions.map(action => <button type="button"
+                                                               key={"action-" + index + "-" + action.id}
+                                                               onClick={() => executeDeviceAction(device.name, action.id)}>{action.displayName}</button>)}
+            </>)
+        }
         <h3>Status</h3>
         <div>Connection: {connectionStatus}</div>
         {lastActionResult &&

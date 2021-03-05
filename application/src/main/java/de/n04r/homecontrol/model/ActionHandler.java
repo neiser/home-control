@@ -25,6 +25,7 @@ public class ActionHandler {
     public ActionResult executeAction(List<Device> devices, Action action) {
         List<Device> devicesSupportingAction = devices.stream()
                 .filter(device -> device.getType().getSupportedActions().contains(action))
+                .distinct() // make sure we don't run actions twice on the same device
                 .collect(Collectors.toList());
 
         log.debug("Executing {} on {} devices", action, devicesSupportingAction.size());

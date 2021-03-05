@@ -26,23 +26,23 @@ devices:
     type: SHELLY25_SHUTTER
     host: shellyswitch25-6886EF
     tags: [ Unten, WoKüEss ]
-  - name: Wohnzimmer links
+  - name: WoZi links
     type: SHELLY25_SHUTTER
     host: shellyswitch25-688911
     tags: [ Unten, WoKüEss, Hinten ]
-  - name: Wohnzimmer mitte
+  - name: WoZi mitte
     type: SHELLY25_SHUTTER
     host: shellyswitch25-687B95
     tags: [ Unten, WoKüEss, Hinten ]
-  - name: Wohnzimmer rechts
+  - name: WoZi rechts
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68872F
     tags: [ Unten, WoKüEss, Hinten ]
-  - name: Esszimmer links
+  - name: EssZi links
     type: SHELLY25_SHUTTER
     host: shellyswitch25-687D3C
     tags: [ Unten, WoKüEss ]
-  - name: Esszimmer links
+  - name: EssZi links
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68DC50
     tags: [ Unten, WoKüEss ]
@@ -89,5 +89,5 @@ devices:
   - name: TV
     type: SHELLY1PM
     host: shelly1-BA338A
-    tags: [ WoKüEss, Unten, TV ]
+    tags: [ WoKüEss, Unten ]
 

@@ -1,6 +1,5 @@
 package de.n04r.homecontrol.model;
 
-import de.n04r.homecontrol.config.DevicesConfigurationProperties;
 import de.n04r.homecontrol.config.ScenesConfigurationProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,8 @@ public class SceneHandler {
 
     private final TagHandler tagHandler;
     private final ActionHandler actionHandler;
+    private final DeviceHandler deviceHandler;
     private final ScenesConfigurationProperties scenesConfigurationProperties;
-    private final DevicesConfigurationProperties devicesConfigurationProperties;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public List<String> getAvailableScenes() {
@@ -68,15 +67,11 @@ public class SceneHandler {
                 allDevices.addAll(tagHandler.findDevices(command.getTags()));
             }
             if (command.getDevices() != null) {
-                allDevices.addAll(findDevicesByNames(command.getDevices()));
+                allDevices.addAll(deviceHandler.findDevicesByNames(command.getDevices()));
             }
             return actionHandler.executeAction(allDevices, command.getAction());
         });
     }
 
-    private List<Device> findDevicesByNames(List<String> deviceNames) {
-        return devicesConfigurationProperties.stream()
-                .filter(d -> deviceNames.contains(d.getName()))
-                .collect(Collectors.toList());
-    }
+
 }

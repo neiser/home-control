@@ -4,7 +4,6 @@ import de.n04r.homecontrol.config.DevicesConfigurationProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +13,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TagHandler {
 
+    private final DeviceHandler deviceHandler;
     private final DevicesConfigurationProperties devicesConfigurationProperties;
 
     public List<String> getAvailableTags() {
@@ -24,14 +24,12 @@ public class TagHandler {
                 .collect(Collectors.toList());
     }
 
-    public List<Action> findAvailableActions(Collection<String> tags) {
+    public List<AvailableAction> findAvailableActions(Collection<String> tags) {
         Set<Action> allowedActions = findDevices(tags).stream()
                 .map(Device::getType)
                 .flatMap(deviceType -> deviceType.getSupportedActions().stream())
                 .collect(Collectors.toSet());
-        return Arrays.stream(Action.values())
-                .filter(allowedActions::contains)
-                .collect(Collectors.toList());
+        return deviceHandler.mapDeviceActions(allowedActions);
     }
 
     public List<Device> findDevices(Collection<String> tags) {
