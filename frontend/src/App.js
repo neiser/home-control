@@ -83,24 +83,24 @@ function App() {
     return (<>
         <h3>Batch</h3>
         <div>
-            {availableTags.map(tag => <button type="button" key={"tag-" + tag} onClick={() => toggleTag(tag)}
+            {availableTags.map(tag => <button type="button" key={tag} onClick={() => toggleTag(tag)}
                                               className={selectedTags.indexOf(tag) > -1 ? "toggle-button-active" : null}>{tag}</button>)}
         </div>
         <div style={{"marginTop": "1em"}}>
-            {availableActions.map(action => <button type="button" key={"action-" + action.id}
+            {availableActions.map(action => <button type="button" key={action.id}
                                                     onClick={() => executeBatchAction(action.id)}>{action.displayName}</button>)}
         </div>
         <h3>Scenes</h3>
-        {availableScenes.map(scene => <button type="button" key={"scene-" + scene}
+        {availableScenes.map(scene => <button type="button" key={scene}
                                               onClick={() => activateScene(scene)}>{scene}</button>)}
         <h3>Devices</h3>
         {
-            availableDevices.map((device, index) => <>
+            availableDevices.map((device) => <div key={device.name}>
                 <h3>{device.name}</h3>
                 {device.availableActions.map(action => <button type="button"
-                                                               key={"action-" + index + "-" + action.id}
+                                                               key={device.name + "-" + action.id}
                                                                onClick={() => executeDeviceAction(device.name, action.id)}>{action.displayName}</button>)}
-            </>)
+            </div>)
         }
         <h3>Status</h3>
         <div>Connection: {connectionStatus}</div>
