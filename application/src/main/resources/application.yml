@@ -16,6 +16,12 @@ scenes:
     commands:
       - action: SHUTTER_UP
         tags: [ Unten, NichtBad ]
+  - name: Gute Nacht
+    commands:
+      - action: SHUTTER_DOWN
+        tags: [ Unten, Oben ]
+      - action: SWITCH_OFF
+        devices: [ TV, TV Lampe ]
 
 devices:
   - name: TV
