@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import useWebSocket, {ReadyState} from 'react-use-websocket';
 import './App.css'
 
@@ -19,7 +19,6 @@ function App() {
     const [availableDevices, setAvailableDevices] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [lastActionResult, setLastActionResult] = useState(null);
-
 
     useEffect(
         () => {
@@ -49,28 +48,32 @@ function App() {
         [lastJsonMessage],
     );
 
-    const toggleTag = (tag) => {
-        let index = selectedTags.indexOf(tag);
+    const toggleTag = useCallback(tag => setSelectedTags(oldTags => {
+        const newTags = [...oldTags]
+        let index = oldTags.indexOf(tag);
         if (index > -1) {
-            selectedTags.splice(index, 1)
+            newTags.splice(index, 1)
         } else {
-            selectedTags.push(tag)
+            newTags.push(tag)
         }
-        setSelectedTags([...selectedTags])
-        sendJsonMessage({type: "tags-selected", tags: [...selectedTags]})
-    }
+        return newTags
+    }), [])
 
-    const executeBatchAction = (action) => {
+    useEffect(() => {
+        sendJsonMessage({type: "tags-selected", tags: selectedTags})
+    }, [sendJsonMessage, selectedTags])
+
+    const executeBatchAction = useCallback((action) => {
         sendJsonMessage({type: "execute-batch-action", action: action, tags: [...selectedTags]})
-    }
+    }, [sendJsonMessage, selectedTags])
 
-    const executeDeviceAction = (device, action) => {
+    const executeDeviceAction = useCallback((device, action) => {
         sendJsonMessage({type: "execute-device-action", action: action, device: device})
-    }
+    }, [sendJsonMessage])
 
-    const activateScene = (scene) => {
+    const activateScene = useCallback((scene) => {
         sendJsonMessage({type: "activate-scene", scene: scene})
-    }
+    }, [sendJsonMessage])
 
     const connectionStatus = {
         [ReadyState.CONNECTING]: 'Connecting',

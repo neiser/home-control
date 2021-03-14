@@ -58,12 +58,12 @@ public class WebsocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
         AbstractWsMessage abstractMessage = objectMapper.readValue(textMessage.getPayload(), AbstractWsMessage.class);
+        log.debug("Got message {}", abstractMessage);
         if (abstractMessage instanceof ExecuteBatchActionWsMessage) {
             ExecuteBatchActionWsMessage message = (ExecuteBatchActionWsMessage) abstractMessage;
             List<Device> devices = tagHandler.findDevices(message.getTags());
             ActionResult actionResult = actionHandler.executeAction(devices, message.getAction());
             sendActionResult(session, actionResult);
-
         } else if (abstractMessage instanceof TagsSelectedWsMessage) {
             TagsSelectedWsMessage message = (TagsSelectedWsMessage) abstractMessage;
             List<AvailableAction> availableActions = tagHandler.findAvailableActions(message.getTags());
