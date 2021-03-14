@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import useWebSocket, {ReadyState} from 'react-use-websocket';
 import './App.css'
 
@@ -13,40 +13,38 @@ function App() {
         reconnectAttempts: Number.MAX_SAFE_INTEGER
     });
 
-    const [availableTags, setAvailableTags] = useState([]);
-    const [availableActions, setAvailableActions] = useState([]);
-    const [availableScenes, setAvailableScenes] = useState([]);
-    const [availableDevices, setAvailableDevices] = useState([]);
-    const [selectedTags, setSelectedTags] = useState([]);
-    const [lastActionResult, setLastActionResult] = useState(null);
+    const availableTags = useRef([]);
+    const availableActions = useRef([]);
+    const availableScenes = useRef([]);
+    const availableDevices = useRef([]);
+    const lastActionResult = useRef(null);
 
-    useEffect(
-        () => {
-            if (!lastJsonMessage || !lastJsonMessage.type) {
-                return;
-            }
-            switch (lastJsonMessage.type) {
-                case "available-tags":
-                    setAvailableTags(lastJsonMessage.tags)
-                    break;
-                case "available-scenes":
-                    setAvailableScenes(lastJsonMessage.scenes)
-                    break;
-                case "available-actions":
-                    setAvailableActions(lastJsonMessage.actions)
-                    break;
-                case "available-devices":
-                    setAvailableDevices(lastJsonMessage.devices)
-                    break;
-                case "action-result":
-                    setLastActionResult(lastJsonMessage);
-                    break;
-                default:
-                    console.log(`Unknown message type: ${lastJsonMessage.type}`)
-            }
-        },
-        [lastJsonMessage],
-    );
+    const [selectedTags, setSelectedTags] = useState([]);
+
+    availableTags.current = useMemo(
+        () => lastJsonMessage && lastJsonMessage.type === "available-tags" ? lastJsonMessage.tags : availableTags.current,
+        [lastJsonMessage]
+    )
+
+    availableScenes.current = useMemo(
+        () => lastJsonMessage && lastJsonMessage.type === "available-scenes" ? lastJsonMessage.scenes : availableScenes.current,
+        [lastJsonMessage]
+    )
+
+    availableActions.current = useMemo(
+        () => lastJsonMessage && lastJsonMessage.type === "available-actions" ? lastJsonMessage.actions : availableActions.current,
+        [lastJsonMessage]
+    )
+
+    availableDevices.current = useMemo(
+        () => lastJsonMessage && lastJsonMessage.type === "available-devices" ? lastJsonMessage.devices : availableDevices.current,
+        [lastJsonMessage]
+    )
+
+    lastActionResult.current = useMemo(
+        () => lastJsonMessage && lastJsonMessage.type === "action-result" ? lastJsonMessage : lastActionResult.current,
+        [lastJsonMessage]
+    )
 
     const toggleTag = useCallback(tag => setSelectedTags(oldTags => {
         const newTags = [...oldTags]
@@ -86,19 +84,19 @@ function App() {
     return (<>
         <h3>Batch</h3>
         <div>
-            {availableTags.map(tag => <button type="button" key={tag} onClick={() => toggleTag(tag)}
-                                              className={selectedTags.indexOf(tag) > -1 ? "toggle-button-active" : null}>{tag}</button>)}
+            {availableTags.current.map(tag => <button type="button" key={tag} onClick={() => toggleTag(tag)}
+                                                      className={selectedTags.indexOf(tag) > -1 ? "toggle-button-active" : null}>{tag}</button>)}
         </div>
         <div style={{"marginTop": "1em"}}>
-            {availableActions.map(action => <button type="button" key={action.id}
-                                                    onClick={() => executeBatchAction(action.id)}>{action.displayName}</button>)}
+            {availableActions.current.map(action => <button type="button" key={action.id}
+                                                            onClick={() => executeBatchAction(action.id)}>{action.displayName}</button>)}
         </div>
         <h3>Scenes</h3>
-        {availableScenes.map(scene => <button type="button" key={scene}
-                                              onClick={() => activateScene(scene)}>{scene}</button>)}
+        {availableScenes.current.map(scene => <button type="button" key={scene}
+                                                      onClick={() => activateScene(scene)}>{scene}</button>)}
         <h3>Devices</h3>
         {
-            availableDevices.map((device) => <div key={device.name}>
+            availableDevices.current.map((device) => <div key={device.name}>
                 <h3>{device.name}</h3>
                 {device.availableActions.map(action => <button type="button"
                                                                key={device.name + "-" + action.id}
@@ -107,8 +105,9 @@ function App() {
         }
         <h3>Status</h3>
         <div>Connection: {connectionStatus}</div>
-        {lastActionResult &&
-        <div>Last action: Successful={lastActionResult.successful} Failed={lastActionResult.failed}</div>}
+        {lastActionResult.current &&
+        <div>Last action:
+            Successful={lastActionResult.current.successful} Failed={lastActionResult.current.failed}</div>}
     </>);
 }
 
