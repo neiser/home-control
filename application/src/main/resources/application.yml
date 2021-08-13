@@ -54,7 +54,7 @@ devices:
     tags: [ Unten, WoKüEss, Hinten ]
   - name: WoZi mitte
     type: SHELLY25_SHUTTER
-    host: shellyswitch25-687B95
+    host: shellyswitch25-E8DB84AC60A9
     tags: [ Unten, WoKüEss, Hinten ]
   - name: WoZi rechts
     type: SHELLY25_SHUTTER
