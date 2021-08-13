@@ -16,6 +16,10 @@ scenes:
     commands:
       - action: SHUTTER_UP
         tags: [ Unten, NichtBad ]
+  - name: Guten Morgen Arbeit
+    commands:
+      - action: SHUTTER_UP
+        tags: [ Unten, NichtSchlaf ]
   - name: Gute Nacht
     commands:
       - action: SHUTTER_DOWN
@@ -79,7 +83,7 @@ devices:
   - name: Bad
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68DB2E
-    tags: Oben
+    tags: [ Oben, NichtSchlaf ]
   - name: Eltern rechts
     type: SHELLY25_SHUTTER
     host: shellyswitch25-6923BE
@@ -91,14 +95,14 @@ devices:
   - name: Kind links
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68DBA5
-    tags: [ Oben, NichtBad ]
+    tags: [ Oben, NichtBad, NichtSchlaf ]
   - name: Kind rechts
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68DAD0
-    tags: [ Oben, NichtBad ]
+    tags: [ Oben, NichtBad, NichtSchlaf ]
   - name: Büro
     type: SHELLY25_SHUTTER
     host: shellyswitch25-68DB76
-    tags: [ Oben, NichtBad ]
+    tags: [ Oben, NichtBad, NichtSchlaf ]
 
 
