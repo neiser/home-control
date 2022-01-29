@@ -30,11 +30,7 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build
-        run: mvn -B verify
-      - uses: actions/upload-artifact@v2
-        with:
-          name: application-jar
-          path: application/target/application-*.jar
-          if-no-files-found: error
-          retention-days: 1
+      - name: Build and publish
+        run: mvn -B verify -Dspring-boot.build-image.imageName=ghcr.io/neiser/home-control -Dspring-boot.build-image.publish=true
+        env:
+          DOCKER_PUSH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
