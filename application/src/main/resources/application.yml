@@ -62,7 +62,7 @@ devices:
     tags: [ Unten, WoKüEss, Hinten ]
   - name: WoZi rechts
     type: SHELLY25_SHUTTER
-    host: shellyswitch25-68872F
+    host: shellyswitch25-E8DB84ACB060
     tags: [ Unten, WoKüEss, Hinten ]
   - name: HWR Tür
     type: SHELLY25_SHUTTER
