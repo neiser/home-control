@@ -46,7 +46,7 @@ devices:
     tags: [ Unten, WoKüEss ]
   - name: EssZi links
     type: SHELLY25_SHUTTER
-    host: shellyswitch25-687D3C
+    host: shellyswitch25-4c752533a164
     tags: [ Unten, WoKüEss ]
   - name: EssZi rechts
     type: SHELLY25_SHUTTER
