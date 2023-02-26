@@ -78,7 +78,7 @@ devices:
     tags: Unten
   - name: Gäste WC
     type: SHELLY25_SHUTTER
-    host: shellyswitch25-68db92
+    host: shellyswitch25-3494547934b0
     tags: Unten
   - name: Bad
     type: SHELLY25_SHUTTER
