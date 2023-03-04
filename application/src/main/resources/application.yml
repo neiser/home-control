@@ -38,7 +38,7 @@ devices:
     tags: [ ]
   - name: Küche links
     type: SHELLY25_SHUTTER
-    host: shellyswitch25-687B91
+    host: shellyswitch25-3494547940A1
     tags: [ Unten, WoKüEss ]
   - name: Küche rechts
     type: SHELLY25_SHUTTER
@@ -50,7 +50,7 @@ devices:
     tags: [ Unten, WoKüEss ]
   - name: EssZi rechts
     type: SHELLY25_SHUTTER
-    host: shellyswitch25-68DC50
+    host: shellyswitch25-349454794263
     tags: [ Unten, WoKüEss ]
   - name: WoZi links
     type: SHELLY25_SHUTTER
